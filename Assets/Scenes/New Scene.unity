@@ -298,6 +298,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 888924ed02cf036489f9ba3f19725406, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  randomHeightRange: {x: 0, y: 0.1}
+  heightMapImage: {fileID: 2800000, guid: 859ff95dd23fcef40919272a5008aae2, type: 3}
+  heightMapScale: {x: 2, y: 0.5, z: 2}
+  terrain: {fileID: 1022795366}
+  terrainData: {fileID: 15600000, guid: e4565720fb1fdc74cbb80198dea1c40f, type: 2}
 --- !u!1 &1066542427
 GameObject:
   m_ObjectHideFlags: 0
