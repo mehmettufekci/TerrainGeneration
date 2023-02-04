@@ -81,13 +81,16 @@ public class CustomTerrainEditor : Editor
         }
 
         showLoadHeights = EditorGUILayout.Foldout(showLoadHeights, "Load Heights");
-        GUILayout.Label("Load Heights From Texture", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(heightMapImage);
-        EditorGUILayout.PropertyField(heightMapScale);
-        if (GUILayout.Button("Load Texture"))
+        if (showLoadHeights)
         {
-            
-            terrain.LoadTexture();
+            GUILayout.Label("Load Heights From Texture", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(heightMapImage);
+            EditorGUILayout.PropertyField(heightMapScale);
+            if (GUILayout.Button("Load Texture"))
+            {
+
+                terrain.LoadTexture();
+            }
         }
 
         showPerlinNoise = EditorGUILayout.Foldout(showPerlinNoise, "Single Perlin Noise");
