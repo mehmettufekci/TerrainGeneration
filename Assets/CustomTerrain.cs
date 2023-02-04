@@ -58,6 +58,8 @@ public class CustomTerrain : MonoBehaviour
     public float MPDheightDampenerPower = 2.0f;
     public float MPDroughness = 2.0f;
 
+    public int smoothAmount = 2;
+
     public Terrain terrain;
     public TerrainData terrainData;
 
@@ -71,6 +73,57 @@ public class CustomTerrain : MonoBehaviour
         {
             return new float[terrainData.heightmapWidth, terrainData.heightmapHeight];
         }
+    }
+
+    List<Vector2> GenerateNeighbours(Vector2 pos, int width, int height)
+    {
+        List<Vector2> neighbours = new List<Vector2>();
+        for (int y = -1; y < 2; y++)
+        {
+            for (int x = -1; x < 2; x++)
+            {
+                if (!(x == 0 && y == 0))
+                {
+                    Vector2 nPos = new Vector2(Mathf.Clamp(pos.x + x, 0, width - 1), Mathf.Clamp(pos.y + y, 0, height - 1));
+                    if (!neighbours.Contains(nPos))
+                    {
+                        neighbours.Add(nPos);
+                    }
+                }
+            }
+        }
+        return neighbours;
+    }
+
+    public void Smooth()
+    {
+        float[,] heightMap = terrainData.GetHeights(0, 0, terrainData.heightmapWidth, terrainData.heightmapHeight);
+        float smoothProgress = 0;
+        EditorUtility.DisplayProgressBar("Smoothing Terrain", "Progress", smoothProgress);
+
+        for (int s = 0; s < smoothAmount; s++)
+        {
+            for (int y = 0; y < terrainData.heightmapHeight; y++)
+            {
+                for (int x = 0; x < terrainData.heightmapWidth; x++)
+                {
+                    float avgHeight = heightMap[x, y];
+                    List<Vector2> neighbours = GenerateNeighbours(new Vector2(x, y), terrainData.heightmapWidth, terrainData.heightmapHeight);
+
+                    foreach (Vector2 n in neighbours)
+                    {
+                        avgHeight += heightMap[(int)n.x, (int)n.y];
+                    }
+
+                    heightMap[x, y] = avgHeight / ((float)neighbours.Count + 1);
+                }
+            }
+            smoothProgress++;
+            EditorUtility.DisplayProgressBar("Smoothing Terrain", "Progress", smoothProgress / smoothAmount);
+        }
+
+        terrainData.SetHeights(0, 0, heightMap);
+        EditorUtility.ClearProgressBar();
     }
 
     public void MidPointDisplacement()
