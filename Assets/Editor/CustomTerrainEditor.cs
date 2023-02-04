@@ -27,6 +27,10 @@ public class CustomTerrainEditor : Editor
     SerializedProperty voronoiMaxHeight;
     SerializedProperty voronoiPeaks;
     SerializedProperty voronoiType;
+    SerializedProperty MPDheightMax;
+    SerializedProperty MPDheightMin;
+    SerializedProperty MPDheightDampenerPower;
+    SerializedProperty MPDroughness;
 
     GUITableState perlinParameterTable;
     SerializedProperty perlinParameters;
@@ -37,6 +41,7 @@ public class CustomTerrainEditor : Editor
     bool showPerlinNoise = false;
     bool showMultiplePerlin = false;
     bool showVoronoi= false;
+    bool showMPD= false;
 
     private void OnEnable()
     {
@@ -59,6 +64,10 @@ public class CustomTerrainEditor : Editor
         voronoiMaxHeight = serializedObject.FindProperty("voronoiMaxHeight");
         voronoiPeaks = serializedObject.FindProperty("voronoiPeaks");
         voronoiType = serializedObject.FindProperty("voronoiType");
+        MPDheightMin = serializedObject.FindProperty("MPDheightMin");
+        MPDheightMax = serializedObject.FindProperty("MPDheightMax");
+        MPDheightDampenerPower = serializedObject.FindProperty("MPDheightDampenerPower");
+        MPDroughness = serializedObject.FindProperty("MPDroughness");
     }
 
     public override void OnInspectorGUI()
@@ -147,6 +156,19 @@ public class CustomTerrainEditor : Editor
             if (GUILayout.Button("Voronoi"))
             {
                 terrain.Voronoi();
+            }
+        }
+
+        showMPD = EditorGUILayout.Foldout(showMPD, "Midpoint Displacement");
+        if (showMPD)
+        {
+            EditorGUILayout.PropertyField(MPDheightMin);
+            EditorGUILayout.PropertyField(MPDheightMax);
+            EditorGUILayout.PropertyField(MPDheightDampenerPower);
+            EditorGUILayout.PropertyField(MPDroughness);
+            if (GUILayout.Button("MPD"))
+            {
+                terrain.MidPointDisplacement();
             }
         }
 
